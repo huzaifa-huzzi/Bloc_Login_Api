@@ -1,3 +1,4 @@
+import 'package:bloc_api_login/Bloc/login/login_bloc.dart';
 import 'package:flutter/material.dart';
 
 
@@ -10,8 +11,24 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
 
+  late LoginBloc _loginBloc ;
   final  emailFocus = FocusNode();
   final passwordFocus = FocusNode();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _loginBloc = LoginBloc();
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _loginBloc.close();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
