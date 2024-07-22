@@ -40,6 +40,7 @@ dependencies:
   bloc: ^8.1.4
   http:
   intl:
+  loading_indicator: ^3.1.1
 
 dev_dependencies:
   flutter_test:

@@ -80,7 +80,27 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(
                 height: 50,
               ),
-              ElevatedButton(onPressed: (){}, child: const Text('Login'))
+              BlocListener<LoginBloc,LoginState>(
+                  listener: (context,state) {
+                    if(state.loadingStatus == LoadingStatus.error){
+                      print('Error');
+                    }
+                    if(state.loadingStatus == LoadingStatus.loading){
+                     print('Submitting');
+                    }
+
+                    if(state.loadingStatus == LoadingStatus.success){
+                      print('Login Succesful');
+                    }
+
+                  },
+                child: BlocBuilder<LoginBloc,LoginState>(builder: (context,state){
+                  return ElevatedButton(onPressed: (){
+                     context.read<LoginBloc>().add(LoginApi());
+                  }, child: const Text('Login'));
+                }),
+              ),
+
             ],
           ),
         ),
