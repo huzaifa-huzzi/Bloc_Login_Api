@@ -1,5 +1,7 @@
 import 'package:bloc_api_login/Bloc/login/login_bloc.dart';
+import 'package:bloc_api_login/Bloc/login/login_event.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -38,34 +40,49 @@ class _LoginScreenState extends State<LoginScreen> {
           backgroundColor: Colors.red,
           centerTitle: true,
         ),
-      body: Padding(
+      body:BlocProvider(
+          create: (_) => _loginBloc,
+        child:  Padding(
           padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextFormField(
-              keyboardType: TextInputType.text,
-              focusNode:emailFocus ,
-              decoration:const  InputDecoration(hintText: 'Email',border: OutlineInputBorder()),
-              onChanged: (value){},
-              onFieldSubmitted: (value){},
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            TextFormField(
-              keyboardType: TextInputType.text,
-              focusNode:passwordFocus ,
-              decoration:const  InputDecoration(hintText: 'Password',border: OutlineInputBorder()),
-              onChanged: (value){},
-              onFieldSubmitted: (value){},
-            ),
-            const SizedBox(
-              height: 50,
-            ),
-            ElevatedButton(onPressed: (){}, child: const Text('Login'))
-          ],
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              BlocBuilder<LoginBloc,LoginState>(
+                  buildWhen: (current,previous) => current.email != previous.email ,
+                  builder: (context,state){
+                return   TextFormField(
+                  keyboardType: TextInputType.text,
+                  focusNode:emailFocus ,
+                  decoration:const  InputDecoration(hintText: 'Email',border: OutlineInputBorder()),
+                  onChanged: (value){
+                    context.read<LoginBloc>().add(EmailChanged(email: value));
+                  },
+                  onFieldSubmitted: (value){},
+                );
+              }),
+              const SizedBox(
+                height: 20,
+              ),
+              BlocBuilder<LoginBloc,LoginState>(
+                buildWhen: (current,previous) => current.password != previous.password,
+                  builder: (context,state){
+                return   TextFormField(
+                  keyboardType: TextInputType.text,
+                  focusNode:passwordFocus ,
+                  decoration:const  InputDecoration(hintText: 'Password',border: OutlineInputBorder()),
+                  onChanged: (value){
+                    context.read<LoginBloc>().add(PasswordChanged(password: value));
+                  },
+                  onFieldSubmitted: (value){},
+                );
+              }),
+              const SizedBox(
+                height: 50,
+              ),
+              ElevatedButton(onPressed: (){}, child: const Text('Login'))
+            ],
+          ),
         ),
       ),
     );
